@@ -11,4 +11,4 @@ auth_token = login(EMAIL, PASSWORD, UNIQUE_LOGIN_ID)
 if (not auth_token):
   print ("Encountered issues during login. Aborting...")
 
-getMediaEvents(auth_token)
+events_creation_times = getMediaEvents(auth_token)
