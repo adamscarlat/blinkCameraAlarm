@@ -17,12 +17,12 @@ def login(email: str, password: str, unique_login_id: str) -> str:
     print (f"Could not login: {response.status_code}. {response.text}")
     return None
 
-  responseDict: dict = json.loads(response.text)
+  response_dict: dict = json.loads(response.text)
 
-  if (not responseDict.get("auth") or not responseDict["auth"].get("token")):
+  if (not response_dict.get("auth") or not response_dict["auth"].get("token")):
     print (f"Did not find auth token in response")
     return None
   
-  return responseDict["auth"]["token"]
+  return response_dict["auth"]["token"]
 
   
