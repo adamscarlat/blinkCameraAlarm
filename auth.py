@@ -1,10 +1,29 @@
 import os, requests, json
+from datetime import datetime, timedelta
 
 LOGIN_API = os.environ["LOGIN_API"]
+REAUTH_TIME_MINUTES = int(os.environ["REAUTH_TIME_MINUTES"])
+
+last_login_time = datetime.min
+cached_token = None
+
+def get_auth_token(email: str, password: str, unique_login_id: str):
+  global cached_token, last_login_time
+  
+  # only do a login if cached token is older than {REAUTH_TIME_MINUTES}
+  now = datetime.now()
+  if (now - last_login_time >= timedelta(minutes=REAUTH_TIME_MINUTES) or not cached_token):
+    print (f"Renewing cached token. Current time: {str(now)}. Last login: {str(last_login_time)}")
+    cached_token = login(email, password, unique_login_id)
+    last_login_time = now
+  
+  return cached_token
 
 # returns auth token
 def login(email: str, password: str, unique_login_id: str) -> str:
   headers = {'Content-Type': 'application/json'}
+  
+  # reauth and unique_id are to prevent MFA during login
   jsonBody = json.dumps({
     "email":email, 
     "password":password, 
