@@ -41,6 +41,18 @@ and it's less than ALARM_THRESHOLD_EVENT_COUNT
                       A1 >-----> A2
 ```
 
+## RPI USB Control
+
+- See all usbs (1-1.4 is top right USB port)
+  `ls /sys/bus/usb/drivers/usb/`
+
+- usb off (run from script using sudo):
+
+  - sudo echo -n '1-1.4' | tee -a /sys/bus/usb/drivers/usb/unbind
+
+- usb on (run from script using sudo):
+  - sudo echo -n '1-1.4' | tee -a /sys/bus/usb/drivers/usb/bind
+
 # TODO
 
 - POC:
