@@ -10,7 +10,7 @@ ALARM_THRESHOLD_EVENT_COUNT = int(os.environ["ALARM_THRESHOLD_EVENT_COUNT"])
   Checks if there are a specific number of events in events_creation_times that fall into
   the alarm lookback period. See alarm specs in README for full details.
 '''
-def is_in_alarm(events_creation_times: list[datetime]):
+def is_in_alarm(events_creation_times):
   alarm_lookback_end = datetime.now(timezone.utc)
   alarm_lookback_start = alarm_lookback_end - timedelta(minutes=ALARM_LOOKBACK_MINUTES)
 
