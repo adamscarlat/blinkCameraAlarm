@@ -46,8 +46,11 @@ and it's less than ALARM_THRESHOLD_EVENT_COUNT
 - POC:
 
   - (DONE) make sure that the auth token does not require 2FA.
-  - check media events API update speed after a video is made.
+  - (DONE) check media events API update speed after a video is made.
+    - events are registered after the video (shorter videos with short debouce time will be better for this)
   - RPI: need to make sure it's working and that the usb port allows power supply changes via code.
+    - (DONE) Start RPI and connect via SSH
+    - Upgrade python version and run app
   - lamp: get the lamp and tie it all together
 
 - Add logging (using the logging library):
