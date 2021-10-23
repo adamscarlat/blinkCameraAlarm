@@ -20,13 +20,11 @@ def run():
 
     # get media events
     events_creation_times = get_media_events(auth_token)
-    if (not events_creation_times):
-      now = datetime.now()
-      now_str = now.strftime()
-      print (f"{now_str} - No events found")
 
-    # analyze media events
-    should_sound_alarm = is_in_alarm(events_creation_times)
+    should_sound_alarm = False
+    if (events_creation_times):
+      # analyze media events
+      should_sound_alarm = is_in_alarm(events_creation_times)
 
     # if alarm, activate usb module
     if (should_sound_alarm):

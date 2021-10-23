@@ -22,7 +22,9 @@ def get_media_events(auth_token: str):
   response_dict: dict = json.loads(response.text)
   media_metadata = response_dict["media"]
   if (not media_metadata):
-    print (f"Response for media events did not contain metadata: {response.text}")
+    now_str = str(datetime.now())
+    print (f"{now_str} - Response for media events did not contain metadata: {response.text}")
+    return []
 
   # collect event creation times as datetime objects
   events_creation_times = []
