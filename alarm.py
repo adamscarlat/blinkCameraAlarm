@@ -50,12 +50,18 @@ def run_alarm():
 
 def run_alarm_cycle():
   for _ in range(ALARM_CYCLE_TIME_SECONDS):
-    subprocess.run(["bash", "scripts/usb_on.sh"], capture_output=True)
+    usb_control("scripts/usb_on.sh", "ON")
     time.sleep(0.5)
 
-    subprocess.run(["bash", "scripts/usb_off.sh"], capture_output=True) 
+    usb_control("scripts/usb_off.sh", "ON")
     time.sleep(0.5)
 
+def usb_control(sub_proc_command: str, mode_str: str):
+  sp_status = subprocess.run(["bash", sub_proc_command], capture_output=True, text=True)
+  if (sp_status.returncode != 0):
+    logger.error(f"Non 0 exit code in ALARM {mode_str} sub process. Exit code: {sp_status.returncode}. Message: {sp_status.stderr}")
+    raise IOError("USB CONTROL FAILURE! Aborting alarm cycle")
+  
 def is_in_datetime_range(range_start:datetime, range_end: datetime, event_time: datetime):
   # range start and end not crossing midnight
   if range_start < range_end:
