@@ -14,6 +14,10 @@ ALARM_BETWEEN_CYCLES_PAUSE_SECONDS = 2
 full_module_path = inspect.getfile(inspect.currentframe())
 CWD = '/'.join(full_module_path.split('/')[:-1])
 
+# assumes that scripts are a child folder to this module
+ALARM_ON_SCRIPT = f"{CWD}/scripts/usb_on.sh"
+ALARM_OFF_SCRIPT = f"{CWD}/scripts/usb_off.sh"
+
 '''
   Checks if there are a specific number of events in events_creation_times that fall into
   the alarm lookback period. See alarm specs in README for full details.
@@ -38,6 +42,10 @@ def is_in_alarm(events_creation_times: List[datetime]):
   logger.info(f"Events found: {events_in_range}. Alarm threshold: {ALARM_THRESHOLD_EVENT_COUNT}. is in alarm: {is_in_alarm}")
   return is_in_alarm
 
+'''
+  Runs {ALARM_CYCLES_TOTAL} alarm cycles with {ALARM_BETWEEN_CYCLES_PAUSE_SECONDS} pause in between
+  each cycle.
+'''
 def run_alarm():
   alarm_cycle_count = 1
 
@@ -52,20 +60,27 @@ def run_alarm():
       Total time in alarm: \
       {(ALARM_CYCLE_TIME_SECONDS + ALARM_BETWEEN_CYCLES_PAUSE_SECONDS) * alarm_cycle_count} seconds")
 
+'''
+  Does an ON then OFF with a pause of 0.5 seconds. Repeats this for {ALARM_CYCLE_TIME_SECONDS}
+  seconds.
+'''
 def run_alarm_cycle():
   for _ in range(ALARM_CYCLE_TIME_SECONDS):
-    usb_control("scripts/usb_on.sh", "ON")
+    sub_proc_control(ALARM_ON_SCRIPT, "ON")
     time.sleep(0.5)
 
-    usb_control("scripts/usb_off.sh", "ON")
+    sub_proc_control(ALARM_OFF_SCRIPT, "OFF")
     time.sleep(0.5)
 
-def usb_control(sub_proc_path: str, mode_str: str):
-  script_path = f"{CWD}/{sub_proc_path}"
+'''
+  Given an absolute path for a script, runs it as a subprocess. If the subprocess returns a non 0 exit
+  code, this function will raise an IOError.
+'''
+def sub_proc_control(script_path: str, mode_str: str):
   sp_status = subprocess.run(["bash", script_path], capture_output=True, text=True)
   if (sp_status.returncode != 0):
     logger.error(f"Non 0 exit code in ALARM {mode_str} sub process. Exit code: {sp_status.returncode}. Message: {sp_status.stderr}")
-    raise IOError("USB CONTROL FAILURE! Aborting alarm cycle")
+    raise IOError("HARDWARE CONTROL FAILURE! Aborting alarm cycle")
   
 def is_in_datetime_range(range_start:datetime, range_end: datetime, event_time: datetime):
   # range start and end not crossing midnight
