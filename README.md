@@ -79,3 +79,9 @@ and it's less than ALARM_THRESHOLD_EVENT_COUNT
 - Create a systemd service:
   - need a bash script for the service to read the .env file into the environment
     and start the program
+  - create set up script (to set up the service with systemd):
+    ```
+    sudo mv alarm.service /lib/systemd/system/alarm.service
+    sudo systemctl daemon-reload
+    sudo systemctl enable alarm.service
+    ```

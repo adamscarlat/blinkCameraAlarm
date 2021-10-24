@@ -13,6 +13,7 @@ UNIQUE_LOGIN_ID = os.environ["UNIQUE_LOGIN_ID"]
 SLEEP_TIME_SECONDS = int(os.environ["SLEEP_TIME_SECONDS"])
 ERROR_RETRY_LIMIT = int(os.environ["ERROR_RETRY_LIMIT"])
 MAX_LOG_SIZE_MB = int(os.environ["MAX_LOG_SIZE_MB"])
+LOG_PATH = os.environ["LOG_PATH"]
 
 def run():
   while True:
@@ -65,9 +66,10 @@ def set_logging():
   msg_format = '%(asctime)s:%(levelname)s:%(funcName)s():%(lineno)s:%(message)s'
   date_format='%Y-%m-%d %H:%M:%S'
   max_log_size_bytes = 1024 * 1024 * MAX_LOG_SIZE_MB
+  log_file_path = f"{LOG_PATH}/alarm.log"
 
   log_formatter = logging.Formatter(fmt=msg_format, datefmt=date_format)
-  log_handler = handlers.RotatingFileHandler('alarm.log', maxBytes=max_log_size_bytes, backupCount=7)
+  log_handler = handlers.RotatingFileHandler(log_file_path, maxBytes=max_log_size_bytes, backupCount=7)
   log_handler.setFormatter(log_formatter)
 
   logger.setLevel(logging.INFO)
