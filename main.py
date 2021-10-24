@@ -68,6 +68,9 @@ def set_logging():
   max_log_size_bytes = 1024 * 1024 * MAX_LOG_SIZE_MB
   log_file_path = f"{LOG_PATH}/alarm.log"
 
+  # create log directory if not exist
+  os.makedirs(os.path.dirname(log_file_path), exist_ok=True)
+
   log_formatter = logging.Formatter(fmt=msg_format, datefmt=date_format)
   log_handler = handlers.RotatingFileHandler(log_file_path, maxBytes=max_log_size_bytes, backupCount=7)
   log_handler.setFormatter(log_formatter)
