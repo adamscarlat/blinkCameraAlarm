@@ -2,4 +2,4 @@
 export $(xargs <.env)
 
 # run the app
-python main.py
+/usr/bin/python3 main.py
