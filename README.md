@@ -23,6 +23,9 @@ UNIQUE_LOGIN_ID=<RANDOM_UUID>
 ACCOUNT_NUMBER==*****
 ```
 
+- Update the `USB_PORT_ID` variable in `var.env`. This should be the usb port's linux id.
+  For example, in RPi 2, the top left USB port is 1-1.4.
+
 - From the repo root folder, run the set up script:
 
 `bash ./scripts/setup.sh`
