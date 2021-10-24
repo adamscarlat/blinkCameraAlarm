@@ -1,10 +1,14 @@
- [Unit]
- Description=Blink Alarm Service
- After=multi-user.target
+[Unit]
+Description=Blink Alarm Service
+After=multi-user.target
+StartLimitInterval=200
+StartLimitBurst=5
 
- [Service]
- Type=idle
- ExecStart=/usr/bin/bash /home/pi/blinkCameraAlarm/scripts/start.sh
+[Service]
+Type=idle
+ExecStart=/usr/bin/bash /home/pi/blinkCameraAlarm/scripts/start.sh
+Restart=always
+RestartSec=30
 
- [Install]
- WantedBy=multi-user.target
+[Install]
+WantedBy=multi-user.target
