@@ -1,6 +1,6 @@
 from datetime import datetime, timedelta, timezone
 from typing import List
-import os, logging, time, subprocess
+import os, logging, time, subprocess, inspect
 
 logger = logging.getLogger('alarm_logger')
 
@@ -9,6 +9,10 @@ ALARM_THRESHOLD_EVENT_COUNT = int(os.environ["ALARM_THRESHOLD_EVENT_COUNT"])
 ALARM_CYCLES_TOTAL = int(os.environ["ALARM_CYCLES_TOTAL"])
 ALARM_CYCLE_TIME_SECONDS = int(os.environ["ALARM_CYCLE_TIME_SECONDS"])
 ALARM_BETWEEN_CYCLES_PAUSE_SECONDS = 2
+
+# get path to app root
+full_module_path = inspect.getfile(inspect.currentframe())
+CWD = '/'.join(full_module_path.split('/')[:-1])
 
 '''
   Checks if there are a specific number of events in events_creation_times that fall into
@@ -56,8 +60,9 @@ def run_alarm_cycle():
     usb_control("scripts/usb_off.sh", "ON")
     time.sleep(0.5)
 
-def usb_control(sub_proc_command: str, mode_str: str):
-  sp_status = subprocess.run(["bash", sub_proc_command], capture_output=True, text=True)
+def usb_control(sub_proc_path: str, mode_str: str):
+  script_path = f"{CWD}/{sub_proc_path}"
+  sp_status = subprocess.run(["bash", script_path], capture_output=True, text=True)
   if (sp_status.returncode != 0):
     logger.error(f"Non 0 exit code in ALARM {mode_str} sub process. Exit code: {sp_status.returncode}. Message: {sp_status.stderr}")
     raise IOError("USB CONTROL FAILURE! Aborting alarm cycle")
