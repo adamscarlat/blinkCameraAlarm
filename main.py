@@ -1,6 +1,6 @@
 import os, time, sys, logging
 from logging import handlers
-from alarm import is_in_alarm
+from alarm import is_in_alarm, run_alarm
 
 from auth import get_auth_token
 from media import get_media_events
@@ -32,7 +32,7 @@ def run():
 
     # if alarm, activate usb module
     if (should_sound_alarm):
-      print ("TODO: run usb module")
+      run_alarm()
     else:
       logger.info("No alarm")
 
