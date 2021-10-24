@@ -66,13 +66,12 @@ def set_logging():
   msg_format = '%(asctime)s:%(levelname)s:%(funcName)s():%(lineno)s:%(message)s'
   date_format='%Y-%m-%d %H:%M:%S'
   max_log_size_bytes = 1024 * 1024 * MAX_LOG_SIZE_MB
-  log_file_path = f"{LOG_PATH}/alarm.log"
 
   # create log directory if not exist
-  os.makedirs(os.path.dirname(log_file_path), exist_ok=True)
+  os.makedirs(os.path.dirname(LOG_PATH), exist_ok=True)
 
   log_formatter = logging.Formatter(fmt=msg_format, datefmt=date_format)
-  log_handler = handlers.RotatingFileHandler(log_file_path, maxBytes=max_log_size_bytes, backupCount=7)
+  log_handler = handlers.RotatingFileHandler(LOG_PATH, maxBytes=max_log_size_bytes, backupCount=7)
   log_handler.setFormatter(log_formatter)
 
   logger.setLevel(logging.INFO)
