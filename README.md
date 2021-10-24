@@ -2,6 +2,39 @@
 
 Alarm that is triggered based on camera events
 
+## Setup
+
+This alarm system is configured to work on Debian based systems and is tied to systemd and to the
+USB pseudo file system. It was tested on Raspberry Pi 2 running Raspberry OS Lite.
+
+To set up the system:
+
+- Clone the repository:
+
+`git clone https://github.com/adamscarlat/blinkCameraAlarm`
+
+- Create a `credentials.env` file with your Blink system credentials. File should have the
+  following:
+
+```
+EMAIL=*****
+PASSWORD=*****
+UNIQUE_LOGIN_ID=<RANDOM_UUID>
+ACCOUNT_NUMBER==*****
+```
+
+- From the repo root folder, run the set up script:
+
+`bash ./scripts/setup.sh`
+
+- Check that the service is running:
+
+`systemctl status alarm.service`
+
+- Check that the logs are saving:
+
+`cat {LOG_PATH}`
+
 ## Alarm Specs
 
 Alarm will receive a list of events creation times in the time period of `{ALARM_LOOKBACK_MINUTES}`.
@@ -60,7 +93,7 @@ and it's less than ALARM_THRESHOLD_EVENT_COUNT
     - (DONE) Start RPI and connect via SSH
     - Upgrade python version and run app
   - lamp: get the lamp and tie it all together
-  - move secrets out of .env to a non-tracked file and track .env. Will need to read them into environment
+  - (DONE) move secrets out of .env to a non-tracked file and track .env. Will need to read them into environment
 
 - Add logging (using the logging library)
 
@@ -74,11 +107,8 @@ and it's less than ALARM_THRESHOLD_EVENT_COUNT
   - (DONE) add try/catch on main loop with exponential backoff
 
 - Create a systemd service:
-  - need a bash script for the service to read the .env file into the environment
+  - (DONE) need a bash script for the service to read the .env file into the environment
     and start the program
-  - create set up script (to set up the service with systemd):
-    ```
-    sudo mv alarm.service /lib/systemd/system/alarm.service
-    sudo systemctl daemon-reload
-    sudo systemctl enable alarm.service
-    ```
+  - (DONR) create set up script (to set up the service with systemd).
+  - (DONE) create teardown script for systemd
+  - (DONE) configure systemd service for limited retries with pause in between

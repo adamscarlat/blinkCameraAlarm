@@ -1,1 +1,1 @@
-sudo echo -n '1-1.4' | tee -a /sys/bus/usb/drivers/usb/unbind
+sudo echo -n ${USB_PORT_ID} | tee -a /sys/bus/usb/drivers/usb/unbind
