@@ -64,6 +64,7 @@ and it's less than ALARM_THRESHOLD_EVENT_COUNT
     - (DONE) Start RPI and connect via SSH
     - Upgrade python version and run app
   - lamp: get the lamp and tie it all together
+  - move secrets out of .env to a non-tracked file and track .env. Will need to read them into environment
 
 - Add logging (using the logging library)
 
