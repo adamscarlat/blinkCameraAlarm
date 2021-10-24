@@ -1,6 +1,8 @@
-import os, requests, json
+import os, requests, json, logging
 from datetime import datetime, timezone, timedelta
 from dateutil import tz
+
+logger = logging.getLogger('alarm_logger')
 
 MEDIA_EVENTS_API = os.environ["MEDIA_EVENTS_API"]
 ACCOUNT_NUMBER = os.environ["ACCOUNT_NUMBER"]
@@ -15,17 +17,17 @@ def get_media_events(auth_token: str):
   response = requests.get(events_url, headers=headers)
 
   if (response.status_code != 200):
-    print (f"Could not get media events: {response.status_code}. {response.text}")
+    logger.error(f"Could not get media events: {response.status_code}. {response.text}")
     return None
 
   # get the response and extract the media metadata
   response_dict: dict = json.loads(response.text)
   media_metadata = response_dict["media"]
   if (not media_metadata):
-    now_str = str(datetime.now())
-    print (f"{now_str} - Response for media events did not contain metadata: {response.text}")
+    logger.info(f"Response for media events did not contain metadata: {response.text}")
     return []
 
+  logger.info(f"Found {len(media_metadata)} events in given timespan")
   # collect event creation times as datetime objects
   events_creation_times = []
   for event in media_metadata:

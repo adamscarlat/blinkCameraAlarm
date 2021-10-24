@@ -65,8 +65,11 @@ and it's less than ALARM_THRESHOLD_EVENT_COUNT
     - Upgrade python version and run app
   - lamp: get the lamp and tie it all together
 
-- Add logging (using the logging library):
+- Add logging (using the logging library)
 
+  - (DONE) show time
+  - (DONE) show function name
+  - (DONE) rotate log files
   - log to s3 (or any location that's easy to access)?
 
 - harden with try/catch
