@@ -6,7 +6,7 @@ logger = logging.getLogger('alarm_logger')
 
 MEDIA_EVENTS_API = os.environ["MEDIA_EVENTS_API"]
 ACCOUNT_NUMBER = os.environ["ACCOUNT_NUMBER"]
-EVENTS_LOOKBACK_MINUTES = int(os.environ["EVENTS_LOOKBACK_MINUTES"])
+ALARM_LOOKBACK_MINUTES = int(os.environ["ALARM_LOOKBACK_MINUTES"])
 
 DATETIME_FORMAT = "%Y-%m-%dT%H:%M:%S+00:00"
 
@@ -41,7 +41,7 @@ def get_media_events(auth_token: str):
 def get_now_utc_datetime_str():
   # 2020-08-03T16:50:24+00:00
   now = datetime.now(timezone.utc)
-  now = now - timedelta(minutes=EVENTS_LOOKBACK_MINUTES)
+  now = now - timedelta(minutes=ALARM_LOOKBACK_MINUTES)
 
   return now.strftime(DATETIME_FORMAT)
 
