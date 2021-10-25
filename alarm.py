@@ -1,6 +1,7 @@
 from datetime import datetime, timedelta, timezone
 from typing import List
 import os, logging, time, subprocess, inspect
+from twilio.rest import Client
 
 logger = logging.getLogger('alarm_logger')
 
@@ -8,7 +9,7 @@ ALARM_LOOKBACK_MINUTES = int(os.environ["ALARM_LOOKBACK_MINUTES"])
 ALARM_THRESHOLD_EVENT_COUNT = int(os.environ["ALARM_THRESHOLD_EVENT_COUNT"])
 ALARM_CYCLES_TOTAL = int(os.environ["ALARM_CYCLES_TOTAL"])
 ALARM_CYCLE_TIME_SECONDS = int(os.environ["ALARM_CYCLE_TIME_SECONDS"])
-ALARM_BETWEEN_CYCLES_PAUSE_SECONDS = 2
+ALARM_BETWEEN_CYCLES_PAUSE_SECONDS = 60
 
 # get path to app root
 full_module_path = inspect.getfile(inspect.currentframe())
@@ -17,6 +18,15 @@ CWD = '/'.join(full_module_path.split('/')[:-1])
 # assumes that scripts are a child folder to this module
 ALARM_ON_SCRIPT = f"{CWD}/scripts/usb_on.sh"
 ALARM_OFF_SCRIPT = f"{CWD}/scripts/usb_off.sh"
+
+# Twillo
+TWILLO_FROM_NUMBER = os.environ["TWILLO_FROM_NUMBER"]
+TWILLO_TO_NUMBER = os.environ["TWILLO_TO_NUMBER"]
+DIAL_NUMBERS = [TWILLO_TO_NUMBER]
+TWIML_INSTRUCTIONS_URL = "http://static.fullstackpython.com/phone-calls-python.xml"
+TWILLO_ACCOUNT = os.environ["TWILLO_ACCOUNT"]
+TWILLO_SECRET = os.environ["TWILLO_SECRET"]
+twillo_client = Client(TWILLO_ACCOUNT, TWILLO_SECRET)
 
 '''
   Checks if there are a specific number of events in events_creation_times that fall into
@@ -42,6 +52,12 @@ def is_in_alarm(events_creation_times: List[datetime]):
   logger.info(f"Events found: {events_in_range}. Alarm threshold: {ALARM_THRESHOLD_EVENT_COUNT}. is in alarm: {is_in_alarm}")
   return is_in_alarm
 
+def dial_numbers(numbers_list):
+    """Dials one or more phone numbers from a Twilio phone number."""
+    for number in numbers_list:
+        print("Dialing " + number)
+        twillo_client.calls.create(to=number, from_=TWILLO_FROM_NUMBER, url=TWIML_INSTRUCTIONS_URL, method="GET")
+    
 '''
   Runs {ALARM_CYCLES_TOTAL} alarm cycles with {ALARM_BETWEEN_CYCLES_PAUSE_SECONDS} pause in between
   each cycle.
@@ -51,7 +67,7 @@ def run_alarm():
 
   while alarm_cycle_count <= ALARM_CYCLES_TOTAL:
     logger.info(f"Alarm is on. Cycle: {alarm_cycle_count}/{ALARM_CYCLES_TOTAL}")
-    run_alarm_cycle()
+    dial_numbers(DIAL_NUMBERS)
     
     time.sleep(ALARM_BETWEEN_CYCLES_PAUSE_SECONDS)
     alarm_cycle_count += 1

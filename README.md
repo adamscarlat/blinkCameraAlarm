@@ -88,6 +88,11 @@ and it's less than ALARM_THRESHOLD_EVENT_COUNT
 # TODO
 
 - POC:
+  !!! Clean up lamp stuff (usb, alarm cycle code) and document new twillo call workflow (credentials)
+  !!! clean up twillo code (env vars, etc...)
+
+  - see about twillo calls API
+  - adjust subsequent calls pause time
 
   - (DONE) make sure that the auth token does not require 2FA.
   - (DONE) check media events API update speed after a video is made.
@@ -110,8 +115,11 @@ and it's less than ALARM_THRESHOLD_EVENT_COUNT
   - (DONE) add try/catch on main loop with exponential backoff
 
 - Create a systemd service:
+
   - (DONE) need a bash script for the service to read the .env file into the environment
     and start the program
   - (DONR) create set up script (to set up the service with systemd).
   - (DONE) create teardown script for systemd
   - (DONE) configure systemd service for limited retries with pause in between
+
+- Add a system scheduler to turn WHOLE system on and off at certain times
