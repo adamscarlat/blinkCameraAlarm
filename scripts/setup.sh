@@ -1,7 +1,7 @@
 if [ ! -f ./credentials.txt ]
 then
   echo "Cannot start without credentials. See readme for more details"
-  exit
+  exit 1
 fi
 
 # install dependencies
