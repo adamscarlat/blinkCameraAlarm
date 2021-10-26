@@ -81,7 +81,13 @@ and it's less than ALARM_THRESHOLD_EVENT_COUNT
 - POC:
 
   - see about twillo calls API
+    - need to turn off alarm if user picks up the call
+  - service endpoint
+    - a simple API which can check the status of the service upon request. used to make sure
+      service is up
+    - an api to change vars.env values
   - adjust subsequent calls pause time
+    - measure time for a call end to end and make that the pause time
   - create a server user-data script (for a fresh server) - need python3-pip
     - fix the hard-coded `/home/ubuntu/blinkCameraAlarm` that is littered in:
       - scripts (service and start)
