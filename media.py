@@ -24,7 +24,7 @@ def get_media_events(auth_token: str):
   response_dict: dict = json.loads(response.text)
   media_metadata = response_dict["media"]
   if (not media_metadata):
-    logger.info(f"Response for media events did not contain metadata: {response.text}")
+    logger.debug(f"Response for media events did not contain metadata: {response.text}")
     return []
 
   logger.info(f"Found {len(media_metadata)} events in given timespan")

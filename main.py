@@ -34,7 +34,7 @@ def run():
     if (should_sound_alarm):
       run_alarm()
     else:
-      logger.info("No alarm")
+      logger.debug("No alarm")
 
     # pause
     time.sleep(SLEEP_TIME_SECONDS)
