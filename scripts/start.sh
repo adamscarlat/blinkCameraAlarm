@@ -5,8 +5,5 @@ PYTHON3_PATH=/usr/bin/python3
 export $(xargs <${APP_ROOT}/vars.env)
 export $(xargs <${APP_ROOT}/credentials.env)
 
-# start with USB power off
-bash ${APP_ROOT}/scripts/usb_off.sh
-
 # run the app
 ${PYTHON3_PATH} ${APP_ROOT}/main.py

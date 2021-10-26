@@ -4,8 +4,7 @@ Alarm that is triggered based on camera events
 
 ## Setup
 
-This alarm system is configured to work on Debian based systems and is tied to systemd and to the
-USB pseudo file system. It was tested on Raspberry Pi 2 running Raspberry OS Lite.
+This alarm system is configured to work on Debian based systems. It requires Python >= 3.8.
 
 To set up the system:
 
@@ -17,14 +16,18 @@ To set up the system:
   following:
 
 ```
+# blink creds
 EMAIL=*****
 PASSWORD=*****
 UNIQUE_LOGIN_ID=<RANDOM_UUID>
 ACCOUNT_NUMBER==*****
-```
 
-- Update the `USB_PORT_ID` variable in `var.env`. This should be the usb port's linux id.
-  For example, in RPi 2, the top left USB port is 1-1.4.
+# twillo creds
+TWILLO_FROM_NUMBER=******
+TWILLO_TO_NUMBER=*******
+TWILLO_ACCOUNT=******
+TWILLO_SECRET=*******
+```
 
 - From the repo root folder, run the set up script:
 
@@ -73,18 +76,6 @@ and it's less than ALARM_THRESHOLD_EVENT_COUNT
   >--------------------------------------->
 ```
 
-## RPI USB Control
-
-- See all usbs (1-1.4 is top right USB port)
-  `ls /sys/bus/usb/drivers/usb/`
-
-- usb off (run from script using sudo):
-
-  - sudo echo -n '1-1.4' | tee -a /sys/bus/usb/drivers/usb/unbind
-
-- usb on (run from script using sudo):
-  - sudo echo -n '1-1.4' | tee -a /sys/bus/usb/drivers/usb/bind
-
 # TODO
 
 - POC:
@@ -97,10 +88,6 @@ and it's less than ALARM_THRESHOLD_EVENT_COUNT
   - (DONE) make sure that the auth token does not require 2FA.
   - (DONE) check media events API update speed after a video is made.
     - events are registered after the video (shorter videos with short debouce time will be better for this)
-  - RPI: need to make sure it's working and that the usb port allows power supply changes via code.
-    - (DONE) Start RPI and connect via SSH
-    - Upgrade python version and run app
-  - lamp: get the lamp and tie it all together
   - (DONE) move secrets out of .env to a non-tracked file and track .env. Will need to read them into environment
 
 - Add logging (using the logging library)

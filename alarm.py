@@ -8,8 +8,7 @@ logger = logging.getLogger('alarm_logger')
 ALARM_LOOKBACK_MINUTES = int(os.environ["ALARM_LOOKBACK_MINUTES"])
 ALARM_THRESHOLD_EVENT_COUNT = int(os.environ["ALARM_THRESHOLD_EVENT_COUNT"])
 ALARM_CYCLES_TOTAL = int(os.environ["ALARM_CYCLES_TOTAL"])
-ALARM_CYCLE_TIME_SECONDS = int(os.environ["ALARM_CYCLE_TIME_SECONDS"])
-ALARM_BETWEEN_CYCLES_PAUSE_SECONDS = 60
+ALARM_BETWEEN_CYCLES_PAUSE_SECONDS = 30
 
 # get path to app root
 full_module_path = inspect.getfile(inspect.currentframe())
@@ -23,7 +22,7 @@ ALARM_OFF_SCRIPT = f"{CWD}/scripts/usb_off.sh"
 TWILLO_FROM_NUMBER = os.environ["TWILLO_FROM_NUMBER"]
 TWILLO_TO_NUMBER = os.environ["TWILLO_TO_NUMBER"]
 DIAL_NUMBERS = [TWILLO_TO_NUMBER]
-TWIML_INSTRUCTIONS_URL = "http://static.fullstackpython.com/phone-calls-python.xml"
+TWILLO_INSTRUCTIONS_URL = "http://static.fullstackpython.com/phone-calls-python.xml"
 TWILLO_ACCOUNT = os.environ["TWILLO_ACCOUNT"]
 TWILLO_SECRET = os.environ["TWILLO_SECRET"]
 twillo_client = Client(TWILLO_ACCOUNT, TWILLO_SECRET)
@@ -52,11 +51,6 @@ def is_in_alarm(events_creation_times: List[datetime]):
   logger.info(f"Events found: {events_in_range}. Alarm threshold: {ALARM_THRESHOLD_EVENT_COUNT}. is in alarm: {is_in_alarm}")
   return is_in_alarm
 
-def dial_numbers(numbers_list):
-    """Dials one or more phone numbers from a Twilio phone number."""
-    for number in numbers_list:
-        print("Dialing " + number)
-        twillo_client.calls.create(to=number, from_=TWILLO_FROM_NUMBER, url=TWIML_INSTRUCTIONS_URL, method="GET")
     
 '''
   Runs {ALARM_CYCLES_TOTAL} alarm cycles with {ALARM_BETWEEN_CYCLES_PAUSE_SECONDS} pause in between
@@ -72,32 +66,16 @@ def run_alarm():
     time.sleep(ALARM_BETWEEN_CYCLES_PAUSE_SECONDS)
     alarm_cycle_count += 1
 
-  logger.info(f"Alarm is off. Ran for {alarm_cycle_count}, {ALARM_CYCLE_TIME_SECONDS} each. \
-      Total time in alarm: \
-      {(ALARM_CYCLE_TIME_SECONDS + ALARM_BETWEEN_CYCLES_PAUSE_SECONDS) * alarm_cycle_count} seconds")
+  logger.info(f"Alarm is off. Ran for {alarm_cycle_count} iterations")
 
 '''
-  Does an ON then OFF with a pause of 0.5 seconds. Repeats this for {ALARM_CYCLE_TIME_SECONDS}
-  seconds.
+  Dials one or more phone numbers from a Twilio phone number
 '''
-def run_alarm_cycle():
-  for _ in range(ALARM_CYCLE_TIME_SECONDS):
-    sub_proc_control(ALARM_ON_SCRIPT, "ON")
-    time.sleep(0.5)
+def dial_numbers(numbers_list):
+    for number in numbers_list:
+        logger.info(f"Dialing: {number}")
+        twillo_client.calls.create(to=number, from_=TWILLO_FROM_NUMBER, url=TWILLO_INSTRUCTIONS_URL, method="GET")
 
-    sub_proc_control(ALARM_OFF_SCRIPT, "OFF")
-    time.sleep(0.5)
-
-'''
-  Given an absolute path for a script, runs it as a subprocess. If the subprocess returns a non 0 exit
-  code, this function will raise an IOError.
-'''
-def sub_proc_control(script_path: str, mode_str: str):
-  sp_status = subprocess.run(["bash", script_path], capture_output=True, text=True)
-  if (sp_status.returncode != 0):
-    logger.error(f"Non 0 exit code in ALARM {mode_str} sub process. Exit code: {sp_status.returncode}. Message: {sp_status.stderr}")
-    raise IOError("HARDWARE CONTROL FAILURE! Aborting alarm cycle")
-  
 def is_in_datetime_range(range_start:datetime, range_end: datetime, event_time: datetime):
   # range start and end not crossing midnight
   if range_start < range_end:
