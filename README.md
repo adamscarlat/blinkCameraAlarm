@@ -4,7 +4,7 @@ Alarm that is triggered based on camera events
 
 ## Setup
 
-This alarm system is configured to work on Debian based systems. It requires Python >= 3.8.
+This alarm system is configured to work on Debian based systems. It requires Python >= 3.8 and pip3 (python3-pip).
 
 To set up the system:
 
@@ -79,12 +79,10 @@ and it's less than ALARM_THRESHOLD_EVENT_COUNT
 # TODO
 
 - POC:
-  !!! Clean up lamp stuff (usb, alarm cycle code) and document new twillo call workflow (credentials)
-  !!! clean up twillo code (env vars, etc...)
 
   - see about twillo calls API
   - adjust subsequent calls pause time
-
+  - create a server user-data script (for a fresh server) - need python3-pip
   - (DONE) make sure that the auth token does not require 2FA.
   - (DONE) check media events API update speed after a video is made.
     - events are registered after the video (shorter videos with short debouce time will be better for this)

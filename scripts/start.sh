@@ -1,4 +1,4 @@
-APP_ROOT=/home/pi/blinkCameraAlarm
+APP_ROOT=/home/ubuntu/blinkCameraAlarm
 PYTHON3_PATH=/usr/bin/python3
 
 # set the environment variables
