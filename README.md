@@ -83,6 +83,10 @@ and it's less than ALARM_THRESHOLD_EVENT_COUNT
   - see about twillo calls API
   - adjust subsequent calls pause time
   - create a server user-data script (for a fresh server) - need python3-pip
+    - fix the hard-coded `/home/ubuntu/blinkCameraAlarm` that is littered in:
+      - scripts (service and start)
+      - vars (log path)
+    - need to inject this variable as part of server setup
   - (DONE) make sure that the auth token does not require 2FA.
   - (DONE) check media events API update speed after a video is made.
     - events are registered after the video (shorter videos with short debouce time will be better for this)

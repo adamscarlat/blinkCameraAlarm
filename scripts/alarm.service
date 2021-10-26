@@ -6,7 +6,7 @@ StartLimitBurst=5
 
 [Service]
 Type=idle
-ExecStart=/usr/bin/bash /home/pi/blinkCameraAlarm/scripts/start.sh
+ExecStart=/usr/bin/bash /home/ubuntu/blinkCameraAlarm/scripts/start.sh
 Restart=always
 RestartSec=30
 
