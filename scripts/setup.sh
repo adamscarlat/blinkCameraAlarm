@@ -1,4 +1,4 @@
-if [ ! -f ./credentials.txt ]
+if [ ! -f ./credentials.env ]
 then
   echo "Cannot start without credentials. See readme for more details"
   exit 1
