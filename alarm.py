@@ -8,7 +8,7 @@ logger = logging.getLogger('alarm_logger')
 ALARM_LOOKBACK_MINUTES = int(os.environ["ALARM_LOOKBACK_MINUTES"])
 ALARM_THRESHOLD_EVENT_COUNT = int(os.environ["ALARM_THRESHOLD_EVENT_COUNT"])
 ALARM_CYCLES_TOTAL = int(os.environ["ALARM_CYCLES_TOTAL"])
-ALARM_BETWEEN_CYCLES_PAUSE_SECONDS = 30
+ALARM_BETWEEN_CYCLES_PAUSE_SECONDS = 90
 
 # get path to app root
 full_module_path = inspect.getfile(inspect.currentframe())
@@ -66,7 +66,8 @@ def run_alarm():
     time.sleep(ALARM_BETWEEN_CYCLES_PAUSE_SECONDS)
     alarm_cycle_count += 1
 
-  logger.info(f"Alarm is off. Ran for {alarm_cycle_count} iterations")
+  logger.info(f"Alarm is off. Ran for {alarm_cycle_count - 1} iterations")
+  time.sleep(ALARM_BETWEEN_CYCLES_PAUSE_SECONDS)
 
 '''
   Dials one or more phone numbers from a Twilio phone number
