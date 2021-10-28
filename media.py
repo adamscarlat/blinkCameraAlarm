@@ -33,6 +33,10 @@ def get_media_events(auth_token: str):
   for event in media_metadata:
     if (not event.get("created_at")):
       continue
+    # live view events are also captured as media events of source type: liveview. We do not need them. 
+    if (event.get("source", None) ==  "liveview"):
+      logger.info(f"Found a live view event. Created at: {event.get('created_at')}. Not including it.")
+      continue
     event_time_obj = get_utc_datetime_obj(event["created_at"])
     events_creation_times.append(event_time_obj)
 
